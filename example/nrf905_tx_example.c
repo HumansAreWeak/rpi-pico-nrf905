@@ -15,7 +15,7 @@ int main()
     stdio_init_all();
 
     // Configured SPI0 at 0.5MHz
-    spi_init(spi0, 500 * 1000);
+    spi_init(spi_default, 500 * 1000);
     gpio_set_function(PIN_MISO, GPIO_FUNC_SPI);
     gpio_set_function(PIN_MOSI, GPIO_FUNC_SPI);
     gpio_set_function(PIN_SCK, GPIO_FUNC_SPI);
@@ -31,28 +31,28 @@ int main()
     uint timeouts = 0;
     uint invalids = 0;
 
-    uint8_t data[12];
+    uint8_t debug[12];
 
     while (1)
     {
         char data[NRF905_MAX_PAYLOAD_SIZE] = {0};
 
-        printf("Sending Data: %s\n", data);
+        printf("Sending Data: ");
 
         for (uint8_t i = 0; i < 12; i++)
         {
-            data[i] = 0;
+            debug[i] = 0;
         }
 
-        nrf905_get_config_registers(&nrf905_tx, data);
+        nrf905_get_config_registers(&nrf905_tx, debug);
 
         printf("Config Register\n");
         for (uint8_t i = 0; i < 10; i++)
         {
-            printf("Register %d: %d\n", i, data[i]);
+            printf("Register %d: %d\n", i, debug[i]);
         }
-        printf("CD: %d\n", data[10]);
-        printf("DR: %d\n", data[11]);
+        printf("CD: %d\n", debug[10]);
+        printf("DR: %d\n", debug[11]);
 
         nrf905_send_data(&nrf905_tx, OTHER_DEVICE, &data, sizeof(data), NRF905_NEXTMODE_TX);
 

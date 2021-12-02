@@ -156,8 +156,6 @@ struct nrf905 nrf905_init(spi_inst_t *spi_instance, const uint8_t chip_select_pi
     nrf905.config.use_hw_am = 0;
     nrf905.config.use_power = 1;
 
-    cs_deselect(&nrf905.spi);
-
     if (auto_setup)
     {
         gpio_init(chip_select_pin);
@@ -179,6 +177,8 @@ struct nrf905 nrf905_init(spi_inst_t *spi_instance, const uint8_t chip_select_pi
         gpio_init(standby_pin);
         gpio_set_dir(standby_pin, GPIO_OUT);
     }
+
+    cs_deselect(&nrf905.spi);
 
     powerDown(&nrf905);
     standbyEnter(&nrf905);
